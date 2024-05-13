@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://sqlite.org/draft/jsonb.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="./jsonb_format_files/sqlite.css" rel="stylesheet">
+<title>The SQLite JSONB Format</title>
+<!-- path= -->
+</head>
+<body>
+<div class="nosearch">
+<a href="https://sqlite.org/draft/index.html">
+<img class="logo" src="./jsonb_format_files/sqlite370_banner.gif" alt="SQLite" border="0">
+</a>
+<div><!-- IE hack to prevent disappearing logo --></div>
+<div class="tagline desktoponly">
+<font size="6" color="red">*** DRAFT ***</font>
+</div>
+<div class="menu mainmenu">
+<ul>
+<li><a href="https://sqlite.org/draft/index.html">Home</a>
+</li><li class="mobileonly"><a href="javascript:void(0)" onclick="toggle_div(&quot;submenu&quot;)">Menu</a>
+</li><li class="wideonly"><a href="https://sqlite.org/draft/about.html">About</a>
+</li><li class="desktoponly"><a href="https://sqlite.org/draft/docs.html">Documentation</a>
+</li><li class="desktoponly"><a href="https://sqlite.org/draft/download.html">Download</a>
+</li><li class="wideonly"><a href="https://sqlite.org/draft/copyright.html">License</a>
+</li><li class="desktoponly"><a href="https://sqlite.org/draft/support.html">Support</a>
+</li><li class="desktoponly"><a href="https://sqlite.org/draft/prosupport.html">Purchase</a>
+</li><li class="search" id="search_menubutton">
+<a href="javascript:void(0)" onclick="toggle_search()">Search</a>
+</li></ul>
+</div>
+<div class="menu submenu" id="submenu">
+<ul>
+<li><a href="https://sqlite.org/draft/about.html">About</a>
+</li><li><a href="https://sqlite.org/draft/docs.html">Documentation</a>
+</li><li><a href="https://sqlite.org/draft/download.html">Download</a>
+</li><li><a href="https://sqlite.org/draft/support.html">Support</a>
+</li><li><a href="https://sqlite.org/draft/prosupport.html">Purchase</a>
+</li></ul>
+</div>
+<div class="searchmenu" id="searchmenu">
+<form method="GET" action="https://sqlite.org/draft/search">
+<select name="s" id="searchtype">
+<option value="d">Search Documentation</option>
+<option value="c">Search Changelog</option>
+</select>
+<input type="text" name="q" id="searchbox" value="">
+<input type="submit" value="Go">
+</form>
+</div>
+</div>
+<script>
+function toggle_div(nm) {
+var w = document.getElementById(nm);
+if( w.style.display=="block" ){
+w.style.display = "none";
+}else{
+w.style.display = "block";
+}
+}
+function toggle_search() {
+var w = document.getElementById("searchmenu");
+if( w.style.display=="block" ){
+w.style.display = "none";
+} else {
+w.style.display = "block";
+setTimeout(function(){
+document.getElementById("searchbox").focus()
+}, 30);
+}
+}
+function div_off(nm){document.getElementById(nm).style.display="none";}
+window.onbeforeunload = function(e){div_off("submenu");}
+/* Disable the Search feature if we are not operating from CGI, since */
+/* Search is accomplished using CGI and will not work without it. */
+if( !location.origin || !location.origin.match || !location.origin.match(/http/) ){
+document.getElementById("search_menubutton").style.display = "none";
+}
+/* Used by the Hide/Show button beside syntax diagrams, to toggle the */
+function hideorshow(btn,obj){
+var x = document.getElementById(obj);
+var b = document.getElementById(btn);
+if( x.style.display!='none' ){
+x.style.display = 'none';
+b.innerHTML='show';
+}else{
+x.style.display = '';
+b.innerHTML='hide';
+}
+return false;
+}
+var antiRobot = 0;
+function antiRobotGo(){
+if( antiRobot!=3 ) return;
+antiRobot = 7;
+var j = document.getElementById("mtimelink");
+if(j && j.hasAttribute("data-href")) j.href=j.getAttribute("data-href");
+}
+function antiRobotDefense(){
+document.body.onmousedown=function(){
+antiRobot |= 2;
+antiRobotGo();
+document.body.onmousedown=null;
+}
+document.body.onmousemove=function(){
+antiRobot |= 2;
+antiRobotGo();
+document.body.onmousemove=null;
+}
+setTimeout(function(){
+antiRobot |= 1;
+antiRobotGo();
+}, 100)
+antiRobotGo();
+}
+antiRobotDefense();
+</script>
+<div class="fancy">
+<div class="nosearch">
+<div class="fancy_title">
+The SQLite JSONB Format
+</div>
+<div class="fancy_toc">
+<a onclick="toggle_toc()">
+<span class="fancy_toc_mark" id="toc_mk">►</span>
+Table Of Contents
+</a>
+<div id="toc_sub"><div class="fancy-toc1"><a href="https://sqlite.org/draft/jsonb.html#what_is_jsonb_">1. What Is JSONB?</a></div>
+<div class="fancy-toc1"><a href="https://sqlite.org/draft/jsonb.html#the_purpose_of_this_document">2. The Purpose Of This Document</a></div>
+<div class="fancy-toc1"><a href="https://sqlite.org/draft/jsonb.html#encoding">3. Encoding</a></div>
+<div class="fancy-toc2"><a href="https://sqlite.org/draft/jsonb.html#payload_size">3.1. Payload Size</a></div>
+<div class="fancy-toc2"><a href="https://sqlite.org/draft/jsonb.html#element_type">3.2. Element Type</a></div>
+<div class="fancy-toc2"><a href="https://sqlite.org/draft/jsonb.html#design_rationale_for_element_types">3.3. Design Rationale For Element Types</a></div>
+<div class="fancy-toc2"><a href="https://sqlite.org/draft/jsonb.html#valid_jsonb_blobs">3.4. Valid JSONB BLOBs</a></div>
+</div>
+</div>
+<script>
+function toggle_toc(){
+var sub = document.getElementById("toc_sub")
+var mk = document.getElementById("toc_mk")
+if( sub.style.display!="block" ){
+sub.style.display = "block";
+mk.innerHTML = "&#x25bc;";
+} else {
+sub.style.display = "none";
+mk.innerHTML = "&#x25ba;";
+}
+}
+</script>
+</div>
+
+
+
+
+
+
+<p>This document describes SQLite's <a href="https://sqlite.org/draft/json1.html#jsonbx">JSONB</a> binary encoding of
+JSON.
+
+</p><h1 id="what_is_jsonb_"><span>1. </span>What Is JSONB?</h1>
+
+<p>
+Beginning with version 3.45.0 (pending), SQLite supports an
+alternative binary encoding of JSON which we call "JSONB".  JSONB is
+a binary format that stored as a BLOB.
+
+</p><p>
+The advantage of JSONB over ordinary text RFC 8259 JSON is that JSONB
+is both slightly smaller (by between 5% and 10% in most cases) and
+can be processed in less than half the number of CPU cycles.  The built-in
+<a href="https://sqlite.org/draft/json1.html">JSON SQL functions</a> of SQLite can accept either ordinary text JSON
+or the binary JSONB encoding for any of their JSON inputs.
+
+</p><p>
+The "JSONB" name is inspired by <a href="https://postgresql.org/">PostgreSQL</a>, but the
+on-disk format for SQLite's JSONB is not the same as PostgreSQL's.
+The two formats have the same name, but they have wildly different internal
+representations and are not in any way binary compatible.
+
+</p><p>
+The central idea behind this JSONB specification is that each element
+begins with a header that includes the size and type of that element.
+The header takes the place of punctuation such as double-quotes,
+curly-brackes, square-brackets, commas, and colons.  Since the size
+and type of each element is contained in its header, the element can
+be read faster since it is no longer necessary to carefully scan forward
+looking for the closing delimiter.  The payload of JSONB is the same
+as for corresponding text JSON.  The same payload bytes occur in the
+same order.  The only real difference between JSONB and ordinary text
+JSON is that JSONB includes a binary header on
+each element and omits delimiter and separator punctuation.
+
+</p><h1 id="the_purpose_of_this_document"><span>2. </span>The Purpose Of This Document</h1>
+
+<p>
+JSONB is not intended as an external format to be used by
+applications.  JSONB is designed for internal use by SQLite only.
+Programmers do not need to understand the JSONB format in order to
+use it effectively.
+Applications should access JSONB only through the <a href="https://sqlite.org/draft/json1.html">JSON SQL functions</a>,
+not by looking at individual bytes of the BLOB.
+
+</p><p>
+However, JSONB is intended to be portable and backwards compatible
+for all future versions of SQLite.  In other words, you should not have
+to export and reimport your SQLite database files when you upgrade to
+a newer SQLite version.  For that reason, the JSONB format needs to
+be well-defined.
+
+</p><p>
+This document is therefore similar in purpose to the
+<a href="https://sqlite.org/draft/fileformat2.html">SQLite database file format</a> document that describes the on-disk
+format of an SQLite database file.  Applications are not expected
+to directly read and write the bits and bytes of SQLite database files.
+The SQLite database file format is carefully documented so that it
+can be stable and enduring.  In the same way, the JSONB representation
+of JSON is documented here so that it too can be stable and enduring,
+not so that applications can read or writes individual bytes.
+
+</p><h1 id="encoding"><span>3. </span>Encoding</h1>
+
+<p>
+JSONB is a direct translation of the underlying text JSON. The difference
+is that JSONB uses a binary encoding that is faster to parse compared to
+the detailed syntax of text JSON.
+
+</p><p>
+Each JSON element is encoded as a header and a payload.  The header
+determines type of element (string, numeric, boolean, null, object, or
+array) and the size of the payload.  The header can be between 1 and
+9 bytes in size.  The payload can be any size from zero bytes up to the
+maximum allowed BLOB size.
+
+</p><h2 id="payload_size"><span>3.1. </span>Payload Size</h2>
+
+<p>
+The upper four bits of the first byte of the header determine size of the
+header and possibly also the size of the payload.
+If the upper four bits have a value between 0 and 11, then the header is
+exactly one byte in size and the payload size is determined by those
+upper four bits.  If the upper four bits have a value between 12 and 15,
+that means that the total header size is 2, 3, 5, or 9 bytes and the
+payload size is unsigned big-endian integer that is contained in the
+subsequent bytes.  The size integer is the one byte that following the
+initial header byte if the upper four bits
+are 12, two bytes if the upper bits are 13, four bytes if the upper bits
+are 14, and eight bytes if the upper bits are 15.  The current design
+of SQLite does not support BLOB values larger than 2GiB, so the eight-byte
+variant of the payload size integer will never be used by the current code.
+The eight-byte payload size integer is included in the specification
+to allow for future expansion.
+
+</p><p>
+The header for an element does <i>not</i> need to be in its simplest
+form.  For example, consider the JSON numeric value "<tt>1</tt>".
+That element can be encode in five different ways:
+
+</p><ul>
+<li>  <tt>0x13 0x31</tt>
+</li><li>  <tt>0xc3 0x01 0x31</tt>
+</li><li>  <tt>0xd3 0x00 0x01 0x31</tt>
+</li><li>  <tt>0xe3 0x00 0x00 0x00 0x01 0x31</tt>
+</li><li>  <tt>0xf3 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x01 0x31</tt>
+</li></ul>
+
+<p>
+The shortest encoding is preferred, of course, and usually happens with
+primitive elements such as numbers.  However the total size of an array
+or object might not be known exactly when the header of the element is
+first generated.  It is convenient to reserve space for the largest
+possible header and then go back and fill in the correct payload size
+at the end.  This technique can result in array or object headers that
+are larger than absolutely necessary.
+
+</p><h2 id="element_type"><span>3.2. </span>Element Type</h2>
+
+<p>
+The least-significant four bits of the first byte of the header (the first
+byte masked against 0x0f) determine element type.  The following codes are
+used:
+
+</p><ol>
+<li value="0"><p><b>NULL</b> →
+The element is a JSON "null".  The payload size for a true JSON NULL must
+must be zero.  Future versions of SQLite might extend the JSONB format
+with elements that have a zero element type but a non-zero size.  In that
+way, legacy versions of SQLite will interpret the element as a NULL 
+for backwards compatibility while newer versions will interpret the
+element in some other way.
+
+</p></li><li value="1"><p><b>TRUE</b> →
+The element is a JSON "true".  The payload size must be zero for a actual
+"true" value.  Elements with type 1 and a non-zero payload size are
+reserved for future expansion.  Legacy implementations that see an element
+type of 1 with a non-zero payload size should continue to interpret that
+element as "true" for compatibility.
+
+</p></li><li value="2"><p><b>FALSE</b> →
+The element is a JSON "false".  The payload size must be zero for a actual
+"false" value.  Elements with type 2 and a non-zero payload size are
+reserved for future expansion.  Legacy implementations that see an element
+type of 2 with a non-zero payload size should continue to interpret that
+element as "false" for compatibility.
+
+</p></li><li value="3"><p><b>INT</b> →
+The element is a JSON integer value in the canonical
+RFC 8259 format, without extensions.  The payload is the ASCII
+text representation of that numeric value.
+
+</p></li><li value="4"><p><b>INT5</b> →
+The element is a JSON integer value that is not in the
+canonical format.   The payload is the ASCII
+text representation of that numeric value.  Because the payload is in a
+non-standard format, it will need to be translated when the JSONB is
+converted into RFC 8259 text JSON.
+
+</p></li><li value="5"><p><b>FLOAT</b> →
+The element is a JSON floating-point value in the canonical
+RFC 8259 format, without extensions.  The payload is the ASCII
+text representation of that numeric value.
+
+</p></li><li value="6"><p><b>FLOAT5</b> →
+The element is a JSON floating-point value that is not in the
+canonical format.   The payload is the ASCII
+text representation of that numeric value.  Because the payload is in a
+non-standard format, it will need to be translated when the JSONB is
+converted into RFC 8259 text JSON.
+
+</p></li><li value="7"><p><b>TEXT</b> →
+The element is a JSON string value that does not contain
+any escapes nor any characters that need to be escaped for either SQL or
+JSON.  The payload is the UTF8 text representation of the string value.
+The payload does <i>not</i> include string delimiters.
+
+</p></li><li value="8"><p><b>TEXTJ</b> →
+The element is a JSON string value that contains
+RFC 8259 character escapes (such as "<tt>\n</tt>" or "<tt>\u0020</tt>").
+Those escapes will need to be translated into actual UTF8 if this element
+is <a href="https://sqlite.org/draft/json1.html#jex">extracted</a> into SQL.
+The payload is the UTF8 text representation of the escaped string value.
+The payload does <i>not</i> include string delimiters.
+
+</p></li><li value="9"><p><b>TEXT5</b> →
+The element is a JSON string value that contains
+character escapes, including some character escapes that part of JSON5
+and which are not found in the canonical RFC 8259 spec.
+Those escapes will need to be translated into standard JSON prior to
+rendering the JSON as text, or into their actual UTF8 characters if this
+element is <a href="https://sqlite.org/draft/json1.html#jex">extracted</a> into SQL.
+The payload is the UTF8 text representation of the escaped string value.
+The payload does <i>not</i> include string delimiters.
+
+</p></li><li value="10"><p><b>TEXTRAW</b> →
+The element is a JSON string value that contains
+UTF8 characters that need to be escaped if this string is rendered into
+standard JSON text.
+The payload does <i>not</i> include string delimiters.
+
+</p></li><li value="11"><p><b>ARRAY</b> →
+The element is a JSON array.  The payload contains
+JSONB elements that comprise values contained within the array.
+
+</p></li><li value="12"><p><b>OBJECT</b> →
+The element is a JSON object.  The payload contains
+pairs of JSONB elements that comprise entries for the JSON object.
+The first element in each pair must be a string (types 7 through 10).
+The second element of each pair may be any types, including nested
+arrays or objects.
+
+</p></li><li value="13"><p><b>RESERVED-13</b> →
+Reserved for future expansion.  Legacy implements that encounter this
+element type should raise an error.
+
+</p></li><li value="14"><p><b>RESERVED-14</b> →
+Reserved for future expansion.  Legacy implements that encounter this
+element type should raise an error.
+
+</p></li><li value="15"><p><b>RESERVED-15</b> →
+Reserved for future expansion.  Legacy implements that encounter this
+element type should raise an error.
+</p></li></ol>
+
+<p>
+Element types outside the range of 0 to 12 are reserved for future
+expansion.  The current implement raises an error if see an element type
+other than those listed above.  However, future versions of SQLite might
+use of the three remaining element types to implement indexing or similar
+optimizations, to speed up lookup against large JSON arrays and/or objects.
+
+</p><h2 id="design_rationale_for_element_types"><span>3.3. </span>Design Rationale For Element Types</h2>
+
+<p>
+A key goal of JSONB is that it should be quick to translate
+to and from text JSON and/or be constructed from SQL values.
+When converting from text into JSONB, we do not want the
+converter subroutine to burn CPU cycles converting elements
+values into some standard format which might never be used.
+Format conversion is "lazy" - it is deferred until actually
+needed.  This has implications for the JSONB format design:
+
+</p><ol>
+<li><p>
+Numeric values are stored as text, not a numbers.  The values are
+a direct copy of the text JSON values from which they are derived.
+
+</p></li><li><p>
+There are multiple element types depending on the details of value
+formats.  For example, INT is used for pure RFC-8259 integer
+literals and INT5 exists for JSON5 extensions such as hexadecimal
+notation.  FLOAT is used for pure RFC-8259 floating point literals
+and FLOAT5 is used for JSON5 extensions.  There are four different
+representations of strings, depending on where the string came from
+and how special characters within the string are escaped.
+</p></li></ol>
+
+<p>
+A second goal of JSONB is that it should be capable of serving as the
+"parse tree" for JSON when a JSON value is being processed by the
+various <a href="https://sqlite.org/draft/json1.html">JSON SQL functions</a> built into SQLite.  Before JSONB was
+developed, operations such <a href="https://sqlite.org/draft/json1.html#jrepl">json_replace()</a> and <a href="https://sqlite.org/draft/json1.html#jpatch">json_patch()</a>
+and similar worked in three stages:
+
+</p><ol>
+<li> Translate the text JSON into a internal format that is
+     easier to scan and edit.
+</li><li> Perform the requested operation on the JSON.
+</li><li> Translate the internal format back into text.
+</li></ol>
+
+<p>
+JSONB seeks to serve as the internal format directly - bypassing
+the first and third stages of that process.  Since most of the CPU
+cycles are spent on the first and third stages, that suggests that
+JSONB processing will be much faster than text JSON processing.
+
+</p><p>
+(Aside:  As of this writing, the legacy internal binary format is still used
+for many operations.  Only <a href="https://sqlite.org/draft/json1.html#jex">json_extract()</a> has, thus far, been converted
+to use JSONB directly.  The plan is to convert all JSON processing to
+use JSONB internally.  Hopefully this will be accomplished prior to the
+first official release.)
+
+</p><p>
+So when processing JSONB, only the second stage of the three-stage
+process is required.  But when processing text JSON, it is still necessary
+to do stages one and three.  If JSONB is to be used as the internal
+binary representation, this is yet another reason to store numeric
+values as text.  Storing numbers as text minimizes the amount of
+conversion work needed for stages one and three.  This is also why
+there are four different representations of text in JSONB.  Different
+text representations are used for text coming from different sources
+(RFC-8259 JSON, JSON5, or SQL string values) and conversions only
+happen if and when they are actually needed.
+
+</p><h2 id="valid_jsonb_blobs"><span>3.4. </span>Valid JSONB BLOBs</h2>
+
+<p>
+A valid JSONB BLOB consists of a single JSON element.  The element must
+exactly fill the BLOB.  This one element is often a JSON object or array
+and those usually contain additional elements as its payload, but the
+element can be a primite value such a string, number, boolean, or null.
+
+</p><p>
+When the built-in JSON functions are attempting to determine if a BLOB
+argument is a JSONB or just a random BLOB, they look at the header of
+the outer element to see that it is well-formed and that the element
+completely fills the BLOB.  If these conditions are met, then the BLOB
+is accepted as a JSONB value.
+</p><p align="center"><small><i>This page last modified on  <a href="https://sqlite.org/docsrc/finfo/pages/jsonb.in?m=29ec13a72a" id="mtimelink" data-href="https://sqlite.org/docsrc/finfo/pages/jsonb.in?m=29ec13a72a">2023-12-05 19:57:45</a> UTC </i></small></p>
+<p align="center"><font size="6" color="red">*** DRAFT ***</font></p>
+</div></body></html>

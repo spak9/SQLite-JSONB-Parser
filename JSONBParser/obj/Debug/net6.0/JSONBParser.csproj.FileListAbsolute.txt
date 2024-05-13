@@ -1,0 +1,15 @@
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/bin/Debug/net6.0/JSONBParser
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/bin/Debug/net6.0/JSONBParser.deps.json
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/bin/Debug/net6.0/JSONBParser.runtimeconfig.json
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/bin/Debug/net6.0/JSONBParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/bin/Debug/net6.0/JSONBParser.pdb
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.csproj.AssemblyReference.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.GeneratedMSBuildEditorConfig.editorconfig
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.AssemblyInfoInputs.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.AssemblyInfo.cs
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.csproj.CoreCompileInputs.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/refint/JSONBParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.pdb
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/JSONBParser.genruntimeconfig.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/JSONBParser/obj/Debug/net6.0/ref/JSONBParser.dll

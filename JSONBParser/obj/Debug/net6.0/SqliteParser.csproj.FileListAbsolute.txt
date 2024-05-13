@@ -1,0 +1,15 @@
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/bin/Debug/net6.0/SqliteParser
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/bin/Debug/net6.0/SqliteParser.deps.json
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/bin/Debug/net6.0/SqliteParser.runtimeconfig.json
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/bin/Debug/net6.0/SqliteParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/bin/Debug/net6.0/SqliteParser.pdb
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.csproj.AssemblyReference.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.GeneratedMSBuildEditorConfig.editorconfig
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.AssemblyInfoInputs.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.AssemblyInfo.cs
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.csproj.CoreCompileInputs.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/refint/SqliteParser.dll
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.pdb
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/SqliteParser.genruntimeconfig.cache
+/Users/stevenpak/Desktop/code/jsonb_analysis/SqliteParser/obj/Debug/net6.0/ref/SqliteParser.dll
