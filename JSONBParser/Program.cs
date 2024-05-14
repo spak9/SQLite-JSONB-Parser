@@ -7,10 +7,8 @@ using System.Text.Unicode;
 
 public class Program
 {
-  static void Main(string[] args)
+  static void Main()
   {
-
-    Console.OutputEncoding  = Encoding.UTF8;
 
     // Test case 1: "1"
     byte[] data = Convert.FromHexString("1331");  
@@ -38,7 +36,7 @@ public class Program
     Console.WriteLine(parser);
 
     /*
-      See "TestData/test.sql" for more blob examples. 
+      See "test_data/test.sql" for more blob examples. 
       All of the hexstrings were converted from "jsonb()" functions
     */
 
@@ -103,7 +101,6 @@ public class JSONB
 
   public JSONB(byte[] data)
   {
-    Data = data;
     using (MemoryStream ms = new MemoryStream(data))
     {
       ParseJSONB(ms);
@@ -114,8 +111,6 @@ public class JSONB
   {
     ParseJSONB(stream);
   }
-
-  public byte[] Data { get; init; }
 
   public uint HeaderSize { get; private set; }
 
